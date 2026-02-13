@@ -1,0 +1,58 @@
+{
+  "name": "tsvg-preview",
+  "displayName": "tsvg-preview",
+  "description": "Preview SVG inside TypeScript/JavaScript template literals. Mark a template with /*svg*/ before the backtick to get a gutter icon and code lens; open a live preview in a side tab. Supports variables—inputs are provided for each ${...} with sensible defaults inferred from attribute names (e.g. width, fill, color).",
+  "version": "0.0.1",
+  "license": "MIT",
+  "publisher": "ProjectSyntax",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eleddie/tsvg-preview"
+  },
+  "engines": {
+    "vscode": "^1.105.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "icon": "media/icon.png",
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascriptreact",
+    "onCommand:tsvg-preview.previewSvg"
+  ],
+  "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "yarn run check-types && yarn run lint && node esbuild.cjs",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.cjs --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "yarn run check-types && yarn run lint && node esbuild.cjs --production",
+    "publish:vscode": "sh -c \". ./.env && npx @vscode/vsce package && npx @vscode/vsce publish -p \\\"$ACCESS_TOKEN_VSC\\\"\"",
+    "publish:openvsx": "sh -c \". ./.env && npx ovsx publish -p \\\"$ACCESS_TOKEN_OPEN_VSX\\\"\"",
+    "publish:all": "sh -c \". ./.env && npx @vscode/vsce package && npx @vscode/vsce publish -p \\\"$ACCESS_TOKEN_VSC\\\" && npx ovsx publish -p \\\"$ACCESS_TOKEN_OPEN_VSX\\\"\"",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.109.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.54.0",
+    "eslint": "^9.39.2",
+    "esbuild": "^0.27.2",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.7.1",
+    "ovsx": "^0.9.0"
+  }
+}

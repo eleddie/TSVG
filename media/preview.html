@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>SVG in TS Preview</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: https:;">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 12px;
+      font-family: var(--vscode-font-family);
+      font-size: var(--vscode-font-size);
+      color: var(--vscode-foreground);
+      background: var(--vscode-editor-background);
+    }
+
+    .inputs {
+      margin-bottom: 12px;
+      padding: 8px;
+      background: var(--vscode-input-background);
+      border: 1px solid var(--vscode-input-border);
+      border-radius: 4px;
+    }
+
+    .inputs h3 {
+      margin: 0 0 8px 0;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .input-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-group label {
+      min-width: 80px;
+      font-size: 12px;
+    }
+
+    input[type="text"] {
+      padding: 4px 8px;
+      min-width: 100px;
+      background: var(--vscode-input-background);
+      color: var(--vscode-input-foreground);
+      border: 1px solid var(--vscode-input-border);
+      border-radius: 4px;
+    }
+
+    .preview-wrap {
+      padding: 12px;
+      background: var(--vscode-editor-inactiveSelectionBackground);
+      border-radius: 4px;
+      overflow: auto;
+      min-height: 120px;
+    }
+
+    .preview-wrap svg {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  {{INPUTS_HTML}}
+  <div class="preview-wrap" id="preview"></div>
+  <script>
+    const vars = JSON.parse('{{VARS_JSON}}');
+    let values = JSON.parse('{{VALUES_JSON}}');
+    const rawContent = JSON.parse('{{RAW_CONTENT_JSON}}');
+
+    function substitute(str, vals) {
+      return str.replaceAll(/\$\{([^}]*)\}/g, (_, expr) => {
+        const k = expr.trim();
+        return k in vals ? vals[k] : '';
+      });
+    }
+
+    function render() {
+      const svgStr = substitute(rawContent, values);
+      const wrap = document.getElementById('preview');
+      wrap.innerHTML = '';
+      if (!svgStr.trim()) {
+        wrap.textContent = 'Empty or invalid SVG.';
+        return;
+      }
+      try {
+        const div = document.createElement('div');
+        div.innerHTML = svgStr;
+        const svg = div.querySelector('svg');
+        if (svg) {
+          wrap.appendChild(svg);
+        } else {
+          wrap.textContent = 'No SVG root element found.';
+        }
+      } catch (e) {
+        wrap.textContent = 'Error: ' + e.message;
+      }
+    }
+
+    function setupInputs() {
+      const list = document.getElementById('inputList');
+      if (!list) return;
+      list.innerHTML = '';
+      vars.forEach(name => {
+        const g = document.createElement('div');
+        g.className = 'input-group';
+        const label = document.createElement('label');
+        label.textContent = name + ':';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = name;
+        input.value = values[name] != null ? values[name] : '';
+        input.addEventListener('input', () => {
+          values[name] = input.value;
+          render();
+        });
+        g.appendChild(label);
+        g.appendChild(input);
+        list.appendChild(g);
+      });
+    }
+
+    setupInputs();
+    render();
+  </script>
+</body>
+
+</html>
