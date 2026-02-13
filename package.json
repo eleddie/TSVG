@@ -1,13 +1,13 @@
 {
-  "name": "tsvg-preview",
-  "displayName": "tsvg-preview",
+  "name": "TSVG",
+  "displayName": "TSVG",
   "description": "Preview SVG inside TypeScript/JavaScript template literals. Mark a template with /*svg*/ before the backtick to get a gutter icon and code lens; open a live preview in a side tab. Supports variables—inputs are provided for each ${...} with sensible defaults inferred from attribute names (e.g. width, fill, color).",
   "version": "0.0.1",
   "license": "MIT",
   "publisher": "ProjectSyntax",
   "repository": {
     "type": "git",
-    "url": "https://github.com/eleddie/tsvg-preview"
+    "url": "https://github.com/eleddie/TSVG"
   },
   "engines": {
     "vscode": "^1.105.0"
@@ -21,7 +21,7 @@
     "onLanguage:javascript",
     "onLanguage:typescriptreact",
     "onLanguage:javascriptreact",
-    "onCommand:tsvg-preview.previewSvg"
+    "onCommand:TSVG.previewSvg"
   ],
   "main": "./dist/extension.js",
   "scripts": {
@@ -32,7 +32,7 @@
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
     "package": "yarn run check-types && yarn run lint && node esbuild.cjs --production",
     "publish:vscode": "sh -c \". ./.env && npx @vscode/vsce package && npx @vscode/vsce publish -p \\\"$ACCESS_TOKEN_VSC\\\"\"",
-    "publish:openvsx": "sh -c \". ./.env && npx ovsx publish -p \\\"$ACCESS_TOKEN_OPEN_VSX\\\"\"",
+    "publish:openvsx": "sh -c \". ./.env && npx ovsx publish --pat \\\"$ACCESS_TOKEN_OPEN_VSX\\\"\"",
     "publish:all": "sh -c \". ./.env && npx @vscode/vsce package && npx @vscode/vsce publish -p \\\"$ACCESS_TOKEN_VSC\\\" && npx ovsx publish -p \\\"$ACCESS_TOKEN_OPEN_VSX\\\"\"",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
@@ -42,7 +42,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.109.0",
+    "@types/vscode": "^1.105.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "typescript-eslint": "^8.54.0",
