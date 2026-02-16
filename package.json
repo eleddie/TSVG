@@ -2,8 +2,20 @@
   "name": "TSVG",
   "displayName": "TSVG",
   "description": "Preview SVG inside TypeScript/JavaScript template literals. Mark a template with /*svg*/ before the backtick to get a gutter icon and code lens; open a live preview in a side tab. Supports variables—inputs are provided for each ${...} with sensible defaults inferred from attribute names (e.g. width, fill, color).",
-  "version": "0.0.1",
-  "license": "MIT",
+  "keywords": [
+    "svg",
+    "preview",
+    "template",
+    "literal",
+    "typescript",
+    "javascript",
+    "tsx",
+    "jsx",
+    "tsvg",
+    "tsvg-preview"
+  ],
+  "version": "0.0.2",
+  "license": "GPL-3.0-only",
   "publisher": "ProjectSyntax",
   "repository": {
     "type": "git",

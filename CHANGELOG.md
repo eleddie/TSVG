@@ -1,9 +1,14 @@
 # Change Log
 
-All notable changes to the "tsvg-preview" extension will be documented in this file.
+All notable changes to the "TSVG" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## [0.0.2]
 
-## [Unreleased]
+- Added live update to the preview when changing the svg code
+- Added keywords in the package.json
+- Updated the license in the package.json to match the LICENSE.md file
 
-- Initial release
+
+## [0.0.1]
+
+- Preview SVGs inside typescript files annotated with /*svg*/

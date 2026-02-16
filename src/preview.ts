@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import * as vscode from "vscode";
-import type { SvgTemplateMatch } from "./svgDetection.js";
+import { findSvgTemplates, type SvgTemplateMatch } from "./svgDetection.js";
 
 const VIEW_TYPE = "tsvg-preview";
 
@@ -187,4 +187,37 @@ export function openSvgPreview(
   });
 
   panel.webview.html = getPreviewHtml(context, match, initialValues);
+
+  const documentUri = document.uri.toString();
+  const matchLine = match.line;
+
+  const docListener = vscode.workspace.onDidChangeTextDocument((e) => {
+    if (e.document.uri.toString() !== documentUri) {
+      return;
+    }
+    const matches = findSvgTemplates(e.document);
+    const updated = matches.find((m) => m.line === matchLine) ?? matches[0];
+    if (!updated) {
+      panel.webview.postMessage({
+        type: "update",
+        rawContent: "",
+        variables: [],
+        defaultValues: {},
+      });
+      return;
+    }
+    const contexts = getVariableContexts(updated.rawContent, updated.variables);
+    const defaultValues: Record<string, string> = {};
+    for (const v of updated.variables) {
+      defaultValues[v] = inferDefaultValue(v, contexts[v] ?? []);
+    }
+    panel.webview.postMessage({
+      type: "update",
+      rawContent: updated.rawContent,
+      variables: updated.variables,
+      defaultValues,
+    });
+  });
+
+  panel.onDidDispose(() => docListener.dispose());
 }

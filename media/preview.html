@@ -80,9 +80,23 @@
   {{INPUTS_HTML}}
   <div class="preview-wrap" id="preview"></div>
   <script>
-    const vars = JSON.parse('{{VARS_JSON}}');
+    let vars = JSON.parse('{{VARS_JSON}}');
     let values = JSON.parse('{{VALUES_JSON}}');
-    const rawContent = JSON.parse('{{RAW_CONTENT_JSON}}');
+    let rawContent = JSON.parse('{{RAW_CONTENT_JSON}}');
+
+    window.addEventListener('message', (event) => {
+      const msg = event.data;
+      if (msg.type !== 'update') return;
+      rawContent = msg.rawContent;
+      const defaultValues = msg.defaultValues || {};
+      const newVars = msg.variables || [];
+      for (const name of newVars) {
+        if (values[name] === undefined) values[name] = defaultValues[name] ?? '';
+      }
+      vars = newVars;
+      setupInputs();
+      render();
+    });
 
     function substitute(str, vals) {
       return str.replaceAll(/\$\{([^}]*)\}/g, (_, expr) => {
