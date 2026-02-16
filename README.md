@@ -1,18 +1,31 @@
-# tsvg-preview
+# TSVG
 
 Preview SVG inside TypeScript and JavaScript template literals. Mark a template with `/*svg*/` before the opening backtick to get a live preview in a side tab—with optional inputs for variables and sensible default values.
 
 ## Features
 
-- **Live SVG preview** – Mark any template literal with `/*svg*/` (or `/* svg */`) immediately before the backtick. A **Preview SVG** code lens and a gutter icon appear on that line. Click either to open the SVG in a side preview tab.
+- **Live SVG preview** – Mark any template literal with `/*svg*/` (or `/* svg */`) immediately before the backtick. A **Preview SVG** code lens appears on that line. Click it to open the SVG in a side preview tab.
 - **Variable inputs** – If the template uses interpolations like `${width}` or `${color}`, the preview tab shows a text input for each. Edit values to see the SVG update in real time.
 - **Smart defaults** – Defaults are inferred from how variables are used (e.g. in `width`, `fill`, `stroke`). Numbers get values like `100` or `50`; colors get `#3366cc`; coordinates and radius get sensible defaults.
 
 ## How to use
 
 1. In a `.ts`, `.tsx`, `.js`, or `.jsx` file, add `/*svg*/` right before the opening backtick of a template literal that contains SVG.
-2. Use the **Preview SVG** code lens above the line or the eye icon in the gutter to open the preview.
-3. Or run **Preview SVG** from the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) with the cursor on a line that has a `/*svg*/` template.
+2. Use the **Preview SVG** code lens above the line to open the preview.
+
+## Important
+
+If you don't see the content when previewing the SVG with variables, make sure that all the variables are wrapped in double quotes:
+
+Incorrect:
+```
+fill=${variable}
+```
+
+Correct:
+```
+fill="${variable}"
+```
 
 ### Example
 
@@ -54,13 +67,3 @@ yarn publish:all      # publish to both marketplaces
 yarn publish:vscode   # VS Code Marketplace only
 yarn publish:openvsx  # Open VSX only
 ```
-
-## Release Notes
-
-### 0.0.1
-
-Initial release:
-
-- Preview SVG from `/*svg*/`-marked template literals
-- Code lens and gutter icon to open preview
-- Variable inputs in preview with inferred default values (numbers, colors, coordinates, etc.)
